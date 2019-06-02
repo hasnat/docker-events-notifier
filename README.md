@@ -44,7 +44,10 @@ services:
 
 ```
 
+#### Local build
+Run & develop locally by, check [docker-compose.override.yml](https://github.com/hasnat/docker-events-notifier/blob/master/docker-compose.override.yml)
 
+`docker-compose up --build`
 
 #### Example config
 Design you config by looking into `docker events` & `jq` command
