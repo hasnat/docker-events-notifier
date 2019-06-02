@@ -1,7 +1,7 @@
 # docker-events-notifier
 Docker events notifier
 
-Slack or Email notifications for docker events on your host
+Slack or Email notifications for docker events on your host, < 10mb image, no exposed ports
 
 https://hub.docker.com/r/hasnat/docker-events-notifier/
 
@@ -19,6 +19,7 @@ docker run -it \
     -e HOST_TAG=local \
     -e DOCKER_API_VERSION=1.39 \
     -e RLOG_LOG_LEVEL=DEBUG \
+    -v "/var/run/docker.sock:/var/run/docker.sock" \
     -v "$(pwd)/config.yml:/etc/docker-events-notifier/config.yml" \
     -v "$(pwd)/templates:/etc/docker-events-notifier/templates" \
     hasnat/docker-events-notifier
@@ -37,6 +38,7 @@ services:
       DOCKER_API_VERSION: "1.39"
       RLOG_LOG_LEVEL: DEBUG
     volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
       - "./config.yml:/etc/docker-events-notifier/config.yml"
       - "./templates:/etc/docker-events-notifier/templates"
 
