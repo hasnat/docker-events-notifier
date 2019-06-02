@@ -1,0 +1,44 @@
+
+notifiers:
+  slack:
+    url: "http://webhook/some/webhook/path"
+    template: /etc/docker-events-notifier/templates/slack.json
+  email:
+    url: "smtp://mailhog:1025?from=sender@example.net&to=recipient1@example.net&to=recipient2@example.net"
+    template: /etc/docker-events-notifier/templates/email.txt
+
+# global filters
+filters:
+#  container: ["some_container_name"]
+#  image: ["hasnat/docker-events-notifier"]
+  event: ["stop", "die", "destroy"]
+
+
+
+notifications:
+  - title: "Alert me when tianon/.* based container dies with exitCode 1"
+    when_regex:
+      status: ["(die|destroy)"]
+      "Actor.Attributes.image": ["hasnat/.*"]
+    when:
+      "Actor.Attributes.exitCode": ["1"]
+    notify:
+      - email
+      - slack
+
+  - title: "Alert only on slack when container dies with exitCode 0"
+    when_regex:
+      status: ["(die|destroy)"]
+      "Actor.Attributes.image": ["hasnat/.*"]
+    when:
+      "Actor.Attributes.exitCode": ["0"]
+    notify:
+      - slack
+
+  - title: "Alert me on my precious"
+    when_regex:
+      status: ["(die|destroy)"]
+      "Actor.Attributes.image": ["tianon/.*"]
+    notify:
+      - email
+      - slack

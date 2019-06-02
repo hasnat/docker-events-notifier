@@ -1,0 +1,32 @@
+
+version: '2'
+
+
+services:
+
+  docker-events-notifier:
+    build: .
+    container_name: docker-events-notifier
+    environment:
+      HOST_TAG: local
+      DOCKER_API_VERSION: "1.39"
+      RLOG_LOG_LEVEL: DEBUG
+    volumes:
+      - "./config.yml:/etc/docker-events-notifier/config.yml"
+      - "./templates:/etc/docker-events-notifier/templates"
+
+
+  webhook:
+    container_name: webhook
+    image: nginx
+    restart: unless-stopped
+    command: /bin/bash -c "echo 'log_format postdata escape=none \"$$request - $$request_body\"; server { location /log { access_log off; return 200; } location / { access_log /dev/stdout postdata; proxy_pass http://127.0.0.1/log;  } }' > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
+    ports:
+      - "8026:80"
+
+  mailhog:
+    container_name: mailhog
+    image: mailhog/mailhog
+    restart: unless-stopped
+    ports:
+      - "8025:8025"

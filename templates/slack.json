@@ -1,0 +1,23 @@
+{
+  "attachments": [
+    {
+      "text": "*docker-events-notifier*
+```
+host:      {{.dockerHostLabel}}
+exitCode:  {{.Actor.Attributes.exitCode}}
+container: {{.Actor.Attributes.name}}
+status:    {{.status}}
+image:     {{.Actor.Attributes.image}}
+time:      {{TimeStampFormat .time "Mon Jan _2 15:04:05 MST 2006"}}
+```",
+      "mrkdwn_in": [ "text" ],
+      {{if eq .status "start"}}
+      "color": "good"
+      {{else if eq .status "die" "kill" "destroy"}}
+      "color": "danger"
+      {{else}}
+      "color": "warning"
+      {{end}}
+    }
+  ]
+}

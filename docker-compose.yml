@@ -1,0 +1,16 @@
+
+version: '2'
+
+
+services:
+
+  docker-events-notifier:
+    image: hasnat/docker-events-notifier
+    container_name: docker-events-notifier
+    restart: unless-stopped
+    environment:
+      DOCKER_HOST_LABEL: local
+      DOCKER_API_VERSION: "1.39"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+

@@ -1,0 +1,14 @@
+From: sender@example.net
+Subject: Docker Event on {{.dockerHostLabel}}/{{.Actor.Attributes.name}}
+
+This is the email body.
+host: {{.dockerHostLabel}}
+image: {{.Actor.Attributes.image}}
+exitCode: {{.Actor.Attributes.exitCode}}
+container_name: {{.Actor.Attributes.name}}
+Action: {{.Action}}
+status: {{.status}}
+time: {{TimeStampFormat .time "Mon Jan _2 15:04:05 MST 2006"}}
+
+All Details
+{{ .eventJSON }}
