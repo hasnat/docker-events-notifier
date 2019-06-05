@@ -75,7 +75,7 @@ notifications:
   - title: "Alert me when tianon/.* based container dies with exitCode 1"
     when_regex:
       status: ["(die|destroy)"]
-      "Actor.Attributes.image": ["hasnat/.*"]
+      "Actor.Attributes.image": ["tianon/.*"]
     when:
       "Actor.Attributes.exitCode": ["1"]
     notify:
