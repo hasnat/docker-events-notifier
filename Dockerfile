@@ -18,6 +18,7 @@ RUN apk --no-cache add ca-certificates
 
 WORKDIR /etc/docker-events-notifier
 
+COPY templates/ /etc/docker-events-notifier/templates/
 COPY --from=builder /go/bin/docker-events-notifier .
 
 CMD ["./docker-events-notifier"]
