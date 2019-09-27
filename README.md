@@ -5,6 +5,8 @@ Slack or Email notifications for docker events on your host, < 10mb image, no ex
 
 https://hub.docker.com/r/hasnat/docker-events-notifier/
 
+![docker-events-notifier](https://raw.githubusercontent.com/hasnat/docker-events-notifier/master/docker-events-notifier-screenshot.png)
+
 Look for  config, template for email, slack
 Example
 - [config](https://github.com/hasnat/docker-events-notifier/blob/master/config.yml)
