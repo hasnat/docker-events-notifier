@@ -13,6 +13,9 @@ Example
 - [email template](https://github.com/hasnat/docker-events-notifier/blob/master/templates/email.json)
 - [slack template](https://github.com/hasnat/docker-events-notifier/blob/master/templates/slack.json)
 
+Docker events Reference
+- https://docs.docker.com/engine/reference/commandline/events/
+
 #### Example usage
 Cli
 ```
