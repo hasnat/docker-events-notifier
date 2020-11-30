@@ -176,7 +176,6 @@ func sendNotificationViaSmtp(notificatonUrl *url.URL, message string, verifyTls 
 	var auth = smtp.Auth(nil)
 	password, passSet := notificatonUrl.User.Password()
 	if passSet != false  {
-		//bugfix from original source - using Hostname instead of Host
 		auth = smtp.PlainAuth("", notificatonUrl.User.Username(), password, notificatonUrl.Hostname())
 	}
 
