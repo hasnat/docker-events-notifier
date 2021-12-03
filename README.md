@@ -10,7 +10,7 @@ https://hub.docker.com/r/hasnat/docker-events-notifier/
 Look for  config, template for email, slack
 Example
 - [config](https://github.com/hasnat/docker-events-notifier/blob/master/config.yml)
-- [email template](https://github.com/hasnat/docker-events-notifier/blob/master/templates/email.json)
+- [email template](https://github.com/hasnat/docker-events-notifier/blob/master/templates/email.txt)
 - [slack template](https://github.com/hasnat/docker-events-notifier/blob/master/templates/slack.json)
 
 Docker events Reference
