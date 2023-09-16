@@ -1,0 +1,17 @@
+{
+  "content": "docker-events-notifier",
+  "embeds": [
+    {
+      "title": "docker-events-notifier",
+      "description": "host: {{.dockerHostLabel}}\nexitCode: {{.Actor.Attributes.exitCode}}\ncontainer: {{.Actor.Attributes.name}}\nstatus: {{.status}}\nimage: {{.Actor.Attributes.image}}\ntime: {{TimeStampFormat .time "Mon Jan _2 15:04:05 MST 2006"}}",
+      "color":
+      {{if eq .status "start"}}
+        "65280"
+      {{else if eq .status "die" "kill" "destroy"}}
+        "16711680"
+      {{else}}
+        "16776960"
+      {{end}}
+    }
+  ]
+}

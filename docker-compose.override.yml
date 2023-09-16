@@ -9,7 +9,7 @@ services:
     container_name: docker-events-notifier
     environment:
       HOST_TAG: local
-      DOCKER_API_VERSION: "1.39"
+      DOCKER_API_VERSION: "1.43"
       RLOG_LOG_LEVEL: DEBUG
     volumes:
       - "./config.yml:/etc/docker-events-notifier/config.yml"
