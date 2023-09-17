@@ -16,7 +16,7 @@ notifiers:
 filters:
 #  container: ["some_container_name"]
 #  image: ["hasnat/docker-events-notifier"]
-  event: ["start","stop", "die", "destroy"]
+  event: ["start", "stop", "die", "destroy"]
 
 
 

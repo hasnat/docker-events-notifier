@@ -36,15 +36,7 @@ func MustNoErr(e error, args ...interface{}) {
 		panic(e.Error())
 	}
 }
-func NilOnErr(e error, args ...interface{}) {
-	if e != nil {
-		if args != nil && args[0] != nil {
-			rlog.Error(args[0])
-		}
-		rlog.Critical(e.Error())
-		panic(e.Error())
-	}
-}
+
 func LogDebugNoErr(e error, args ...interface{}) {
 	if e != nil {
 		if args != nil && args[0] != nil {
