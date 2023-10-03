@@ -9,13 +9,13 @@ services:
     container_name: docker-events-notifier
     environment:
       HOST_TAG: local
-      DOCKER_API_VERSION: "1.39"
+      DOCKER_API_VERSION: "1.43"
       RLOG_LOG_LEVEL: DEBUG
     volumes:
       - "./config.yml:/etc/docker-events-notifier/config.yml"
       - "./templates:/etc/docker-events-notifier/templates"
 
-
+# used to test the notifier
   webhook:
     container_name: webhook
     image: nginx
@@ -24,6 +24,7 @@ services:
     ports:
       - "8026:80"
 
+# used to test the notifier with smtp
   mailhog:
     container_name: mailhog
     image: mailhog/mailhog

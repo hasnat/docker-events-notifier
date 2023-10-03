@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
     environment:
       DOCKER_HOST_LABEL: local
-      DOCKER_API_VERSION: "1.39"
+      DOCKER_API_VERSION: "1.43"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
 

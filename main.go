@@ -36,6 +36,7 @@ func MustNoErr(e error, args ...interface{}) {
 		panic(e.Error())
 	}
 }
+
 func LogDebugNoErr(e error, args ...interface{}) {
 	if e != nil {
 		if args != nil && args[0] != nil {
@@ -57,7 +58,9 @@ func MustString(v string, e error) string {
 	MustNoErr(e)
 	return v
 }
-
+func MaybeString(v string, e error) string {
+	return v
+}
 func MustByteArray(v []byte, e error) []byte {
 	MustNoErr(e)
 	return v
@@ -148,6 +151,7 @@ func SendNotification(notification string, eventO *map[string]interface{}) {
 	configO, e := jason.NewObjectFromBytes([]byte(config))
 	MustNoErr(e, "Not valid config")
 	var templateFile = MustString(configO.GetString("notifiers", notification, "template"))
+	var dataEncoding = MaybeString(configO.GetString("notifiers", notification, "data_encoding"))
 
 
 	var tmpl = template.Must(template.New(filepath.Base(templateFile)).
@@ -167,7 +171,7 @@ func SendNotification(notification string, eventO *map[string]interface{}) {
 	if urlParsed.Scheme == "smtp" || urlParsed.Scheme == "smtps" {
 		sendNotificationViaSmtp(urlParsed, output.String(), urlParsed.Scheme == "smtps")
 	} else {
-		sendNotificationViaHttp(urlParsed, output.String())
+		sendNotificationViaHttp(urlParsed, output.String(), dataEncoding)
 	}
 
 }
@@ -183,16 +187,35 @@ func sendNotificationViaSmtp(notificatonUrl *url.URL, message string, verifyTls 
 	err := smtp.SendMail(notificatonUrl.Host, auth, smtpQueryString["from"][0], smtpQueryString["to"], []byte(message))
 	OnlyLogError(err)
 }
-func sendNotificationViaHttp(notificatonUrl *url.URL, message string) {
-	resp, err := http.PostForm(notificatonUrl.String(), url.Values{"payload": {message}})
-	OnlyLogError(err)
+func sendNotificationViaHttp(notificationUrl *url.URL, message string, dataEncoding string) {
+    var resp *http.Response
+    var err error
 
-	if resp.StatusCode != http.StatusOK {
-		defer resp.Body.Close()
-		body, err := ioutil.ReadAll(resp.Body)
-		OnlyLogError(err, "Error posting notification")
-		rlog.Warnf("Didnt receive 200 OK when posting notification %v, %v", resp.Status, body)
-	}
+    switch {
+    case strings.HasPrefix(dataEncoding, "urlencode."):
+        parts := strings.SplitN(dataEncoding, ".", 2)
+        if len(parts) != 2 {
+            rlog.Warnf("Skipping notification > Got unsupported data_encoding ( %v )", dataEncoding)
+            return
+        }
+        payloadKey := parts[1]
+        values := url.Values{payloadKey: {message}}
+        resp, err = http.PostForm(notificationUrl.String(), values)
+    case dataEncoding == "json":
+        resp, err = http.Post(notificationUrl.String(), "application/json", strings.NewReader(message))
+    default:
+        rlog.Warnf("Skipping notification > Got unsupported data_encoding ( %v )", dataEncoding)
+        return
+    }
+
+    OnlyLogError(err)
+
+    if resp != nil && resp.StatusCode != http.StatusOK {
+        defer resp.Body.Close()
+        body, err := ioutil.ReadAll(resp.Body)
+        OnlyLogError(err, "Error posting notification")
+        rlog.Warnf("Didn't receive 200 OK when posting notification %v, %v", resp.Status, string(body))
+    }
 }
 func PrepareAndSendNotifications (title string, event string, notifications []string) {
 

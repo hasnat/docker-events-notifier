@@ -1,4 +1,4 @@
-FROM golang:1.12 as builder
+FROM golang:1.15 as builder
 
 WORKDIR $GOPATH/src/github.com/hasnat/docker-events-notifier
 
@@ -8,13 +8,13 @@ RUN go get -d -v ./...
 
 RUN go install -v ./...
 
-ENV DOCKER_API_VERSION=1.39
+ENV DOCKER_API_VERSION=1.43
 ENV RLOG_LOG_LEVEL=WARN
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /go/bin/docker-events-notifier .
 
 FROM alpine:latest
 
-RUN apk --no-cache add ca-certificates
+
 
 WORKDIR /etc/docker-events-notifier
 

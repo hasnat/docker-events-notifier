@@ -1,8 +1,13 @@
 
 notifiers:
   slack:
-    url: "http://webhook/some/webhook/path"
+    url: "http://webhook/slack"
     template: /etc/docker-events-notifier/templates/slack.json
+    data_encoding: urlencode.payload
+  discord:
+    url: "http://webhook/slack"
+    template: /etc/docker-events-notifier/templates/discord.json
+    data_encoding: json
   email:
     url: "smtp://mailhog:1025?from=sender@example.net&to=recipient1@example.net&to=recipient2@example.net"
     template: /etc/docker-events-notifier/templates/email.txt
@@ -11,11 +16,19 @@ notifiers:
 filters:
 #  container: ["some_container_name"]
 #  image: ["hasnat/docker-events-notifier"]
-  event: ["stop", "die", "destroy"]
+  event: ["start", "stop", "die", "destroy"]
 
 
 
 notifications:
+  - title: "Alert me when jwilder/.* based container restarts"
+    when_regex:
+      status: ["(start|stop)"]
+      "Actor.Attributes.image": ["jwilder/.*"]
+    notify:
+      - discord
+      - slack
+      - email
   - title: "Alert me when tianon/.* based container dies with exitCode 1"
     when_regex:
       status: ["(die|destroy)"]
