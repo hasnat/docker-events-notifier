@@ -12,7 +12,7 @@ ENV DOCKER_API_VERSION=1.43
 ENV RLOG_LOG_LEVEL=WARN
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /go/bin/docker-events-notifier .
 
-FROM alpine:latest
+FROM alpine:3.20
 
 
 
